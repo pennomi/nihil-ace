@@ -1,0 +1,89 @@
+{
+    "blocks":   ["          ",
+                 "  lleell  ",
+                 " bsrcSrsb ",
+                 " ee rr ee ",
+                 "    ee    "],
+    "rotation": ["          ",
+                 "  002200  ",
+                 " 00000000 ",
+                 " 00 00 00 ",
+                 "    00    "],
+    "keybindings": [
+        {
+            "position": [5, 2],
+            "key": "S",
+            "type": "toggle"
+        },
+        {
+            "position": [2, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [3, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [6, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [7, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [2, 2],
+            "key": "SPACE",
+            "type": "toggle"
+        },
+        {
+            "position": [7, 2],
+            "key": "SPACE",
+            "type": "toggle"
+        },
+        {
+            "position": [1, 3],
+            "key": "RIGHT",
+            "type": "mirror"
+        },
+        {
+            "position": [2, 3],
+            "key": "RIGHT",
+            "type": "mirror"
+        },
+        {
+            "position": [4, 4],
+            "key": "RIGHT",
+            "type": "mirror"
+        },
+        {
+            "position": [5, 4],
+            "key": "LEFT",
+            "type": "mirror"
+        },
+        {
+            "position": [8, 3],
+            "key": "LEFT",
+            "type": "mirror"
+        },
+        {
+            "position": [7, 3],
+            "key": "LEFT",
+            "type": "mirror"
+        },
+        {
+            "position": [4, 1],
+            "key": "UP",
+            "type": "mirror"
+        },
+        {
+            "position": [5, 1],
+            "key": "UP",
+            "type": "mirror"
+        }
+    ]
+}

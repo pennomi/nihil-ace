@@ -1,0 +1,70 @@
+{
+    "blocks":   ["       ",
+                 " elsle ",
+                 "  rcr  ",
+                 "   r   ",
+                 "   b   ",
+                 "  ebe  ",
+                 "  eee  ",
+                 "       "],
+    "rotation": ["       ",
+                 " 10003 ",
+                 "  000  ",
+                 "   0   ",
+                 "   0   ",
+                 "  103  ",
+                 "  000  ",
+                 "       "],
+    "keybindings": [
+        {
+            "position": [2, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [4, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [1, 1],
+            "key": "RIGHT",
+            "type": "mirror"
+        },
+        {
+            "position": [4, 5],
+            "key": "RIGHT",
+            "type": "mirror"
+        },
+        {
+            "position": [5, 1],
+            "key": "LEFT",
+            "type": "mirror"
+        },
+        {
+            "position": [2, 5],
+            "key": "LEFT",
+            "type": "mirror"
+        },
+        {
+            "position": [2, 6],
+            "key": "UP",
+            "type": "toggle"
+        },
+        {
+            "position": [3, 6],
+            "key": "UP",
+            "type": "toggle"
+        },
+        {
+            "position": [4, 6],
+            "key": "UP",
+            "type": "toggle"
+        },
+        {
+            "position": [3, 1],
+            "key": "SPACE",
+            "type": "toggle"
+        }
+    ]
+}
