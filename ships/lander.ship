@@ -28,38 +28,38 @@
         },
         {
             "position": [1, 1],
-            "key": "RIGHT",
+            "key": "LEFT",
             "type": "mirror"
         },
         {
             "position": [4, 5],
-            "key": "RIGHT",
+            "key": "LEFT",
             "type": "mirror"
         },
         {
             "position": [5, 1],
-            "key": "LEFT",
+            "key": "RIGHT",
             "type": "mirror"
         },
         {
             "position": [2, 5],
-            "key": "LEFT",
+            "key": "RIGHT",
             "type": "mirror"
         },
         {
             "position": [2, 6],
             "key": "UP",
-            "type": "toggle"
+            "type": "mirror"
         },
         {
             "position": [3, 6],
             "key": "UP",
-            "type": "toggle"
+            "type": "mirror"
         },
         {
             "position": [4, 6],
             "key": "UP",
-            "type": "toggle"
+            "type": "mirror"
         },
         {
             "position": [3, 1],

@@ -182,18 +182,18 @@ class CockpitBlock(Block):
         elif ang < 0 and abs(ang) > math.pi:
             best_direction = "ccw"
         if self._body.angular_velocity > math.pi / 2:
-            [b.on_key_up() for b in self.slave_blocks if b.key == key.RIGHT]
-            [b.on_key_down() for b in self.slave_blocks if b.key == key.LEFT]
-        elif self._body.angular_velocity < -math.pi / 2:
             [b.on_key_up() for b in self.slave_blocks if b.key == key.LEFT]
             [b.on_key_down() for b in self.slave_blocks if b.key == key.RIGHT]
+        elif self._body.angular_velocity < -math.pi / 2:
+            [b.on_key_up() for b in self.slave_blocks if b.key == key.RIGHT]
+            [b.on_key_down() for b in self.slave_blocks if b.key == key.LEFT]
         # TODO: If moving very fast relative to the target, slow down
         elif best_direction == "cw":
-            [b.on_key_up() for b in self.slave_blocks if b.key == key.LEFT]
-            [b.on_key_down() for b in self.slave_blocks if b.key == key.RIGHT]
-        else:
             [b.on_key_up() for b in self.slave_blocks if b.key == key.RIGHT]
             [b.on_key_down() for b in self.slave_blocks if b.key == key.LEFT]
+        else:
+            [b.on_key_up() for b in self.slave_blocks if b.key == key.LEFT]
+            [b.on_key_down() for b in self.slave_blocks if b.key == key.RIGHT]
 
         # SHOOT AT PLAYER IF CLOSE
         ang = self._body.angle - target_dir.angle + math.pi / 2

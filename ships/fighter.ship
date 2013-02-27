@@ -47,41 +47,51 @@
         },
         {
             "position": [1, 3],
-            "key": "RIGHT",
+            "key": "LEFT",
             "type": "mirror"
         },
         {
             "position": [2, 3],
-            "key": "RIGHT",
+            "key": "LEFT",
             "type": "mirror"
         },
         {
             "position": [4, 4],
-            "key": "RIGHT",
+            "key": "LEFT",
             "type": "mirror"
         },
         {
             "position": [5, 4],
-            "key": "LEFT",
+            "key": "RIGHT",
             "type": "mirror"
         },
         {
             "position": [8, 3],
-            "key": "LEFT",
+            "key": "RIGHT",
             "type": "mirror"
         },
         {
             "position": [7, 3],
-            "key": "LEFT",
+            "key": "RIGHT",
             "type": "mirror"
         },
         {
             "position": [4, 1],
-            "key": "UP",
+            "key": "DOWN",
             "type": "mirror"
         },
         {
             "position": [5, 1],
+            "key": "DOWN",
+            "type": "mirror"
+        },
+        {
+            "position": [4, 4],
+            "key": "UP",
+            "type": "mirror"
+        },
+        {
+            "position": [5, 4],
             "key": "UP",
             "type": "mirror"
         }
