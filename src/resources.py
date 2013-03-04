@@ -15,7 +15,7 @@ BLOCK_SIZE = 16
 RESOURCE_IMAGE = pyglet.image.load('images/iron.png').mipmapped_texture
 
 class Resource(object):
-    ttl = 3600 # 1 minute
+    ttl = 600 # 1 minute
 
     def __init__(self, source=None):
         # physics
