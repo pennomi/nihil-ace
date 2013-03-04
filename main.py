@@ -10,7 +10,7 @@ from pyglet.window import key
 from src.space import SPACE, space_upkeep
 from src.blocks import (Block, ShieldBlock, EngineBlock, ReactorBlock,
                     CockpitBlock, BlasterBlock, ArmorBlock, ScannerBlock,
-                    TractorBlock, BLOCK_SIZE)
+                    TractorBlock, AngleLeftBlock, AngleRightBlock, BLOCK_SIZE)
 from src.materials import COLLISION_TYPES
 from pymunk.vec2d import Vec2d
 import random
@@ -45,6 +45,8 @@ BLOCK_MAP = {
               'l': BlasterBlock,
               'S': ScannerBlock,
               't': TractorBlock,
+              'k': AngleLeftBlock,
+              'K': AngleRightBlock,
             }
 
 def spawn_ship(filename, spawn_location, player_controlled=False):

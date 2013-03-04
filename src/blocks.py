@@ -125,6 +125,14 @@ class Block(object):
                 block._build_construction(current_set)
 
 
+class AngleLeftBlock(Block):
+    image = 'images/angle_left.png'
+
+
+class AngleRightBlock(Block):
+    image = 'images/angle_right.png'
+
+
 class ArmorBlock(Block):
     health = 6
     image = 'images/armor.png'
