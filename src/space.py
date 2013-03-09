@@ -13,33 +13,13 @@ _PROJECTILES_TO_REMOVE = WeakSet()
 _RESOURCES_TO_REMOVE = WeakSet()
 
 def space_upkeep(space):
-    # Check for physics damage
-    # TODO: This takes a REALLY LONG TIME. Optimize then replace.
-    #for block in space.blocks:
-    #    block.take_physics_damage()
-    # tick down all projectiles
+    # TODO: refactor this into individual upkeep methods in the classes
+    # upkeep on various entities
     for p in space._projectiles.copy():
-        p.ttl -= 1
-        if p.ttl < 1:
-            space.safe_remove(p._shape, p._body)
-            space.remove_projectile(p)
+        p.upkeep()
     for r in space._resources.copy():
-        r.ttl -= 1
-        if r.ttl < 1:
-            space.safe_remove(r._shape, r._body)
-            space.remove_resource(r)
-        if hasattr(r._shape, "target") and r._shape.target():
-            b = r._shape
-            direction = b.target().position - b.body.position
-            if direction.length < 16 / 2: # TODO: hardcoded block size
-                block = b.target()._get_block()
-                if block:
-                    block.resource_count += 1
-                space.remove_resource(r)
-            # TODO: 160 is the radius of the field...
-            #       let's get that dynamically
-            direction.length = max(0.1, (160 - direction.length) / (160))
-            b.body.apply_impulse(direction)
+        r.upkeep()
+    # tick explosions
     for e in space.explosions:
         e.upkeep()
 

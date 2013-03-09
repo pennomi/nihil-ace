@@ -37,6 +37,24 @@ class Resource(object):
         SPACE.safe_add(self._body, self._shape)
         SPACE.register_resource(self)
 
+    def upkeep(self):
+        self.ttl -= 1 # TODO: some sort of half-life
+        if self.ttl < 1:
+            SPACE.safe_remove(self._shape, self._body)
+            SPACE.remove_resource(self)
+        if hasattr(self._shape, "target") and self._shape.target():
+            b = self._shape
+            direction = b.target().position - b.body.position
+            if direction.length < 16 / 2: # TODO: hardcoded block size
+                block = b.target()._get_block()
+                if block:
+                    block.resource_count += 1
+                SPACE.remove_resource(self)
+            # TODO: 160 is the radius of the field...
+            #       let's get that dynamically
+            direction.length = max(0.1, (160 - direction.length) / (160))
+            b.body.apply_impulse(direction)
+
     def draw(self):
         p = adjust_for_cam(self._body.position)
 

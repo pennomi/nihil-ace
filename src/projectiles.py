@@ -46,6 +46,12 @@ class Projectile:
         if settings.SOUND:
             random.choice(BLASTER_SFX).play()
 
+    def upkeep(self):
+        self.ttl -= 1
+        if self.ttl < 1:
+            SPACE.safe_remove(self._shape, self._body)
+            SPACE.remove_projectile(self)
+
     def draw(self):
         p = adjust_for_cam(self._body.position)
 

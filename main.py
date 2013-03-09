@@ -182,9 +182,6 @@ def on_draw():
     [p.draw() for p in SPACE._projectiles]
     [r.draw() for r in SPACE._resources]
     [e.draw() for e in SPACE.explosions]
-    #t = [b for b in SPACE.blocks if isinstance(b, TractorBlock)]
-    #if t:
-    #    print t[0].resource_count
     FPS_DISPLAY.draw()
 
 def update(dt):
