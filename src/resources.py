@@ -15,8 +15,8 @@ BLOCK_SIZE = 16
 RESOURCE_IMAGE = pyglet.image.load('images/iron.png').mipmapped_texture
 
 class Resource(object):
-    # TODO: instead of TTL, how about some form of a half-life?
-    ttl = 600 # 1 minute
+    # represents the halflife of the resource object
+    decay_chance = 0.00125
 
     def __init__(self, source=None):
         # physics
@@ -38,8 +38,7 @@ class Resource(object):
         SPACE.register_resource(self)
 
     def upkeep(self):
-        self.ttl -= 1 # TODO: some sort of half-life
-        if self.ttl < 1:
+        if self.decay_chance > random.random():
             SPACE.safe_remove(self._shape, self._body)
             SPACE.remove_resource(self)
         if hasattr(self._shape, "target") and self._shape.target():
