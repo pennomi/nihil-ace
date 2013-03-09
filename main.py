@@ -21,6 +21,8 @@ from weakref import ref
 ##############################################################################
 # NOTES:
 #   * Art assets I am using:
+#       * Blocks by Buch:
+#           http://opengameart.org/content/spaceship-construction-blocks
 #       * Explosion by qubodup:
 #           http://opengameart.org/content/bomb-explosion-animation
 #       * Music by ERH:
