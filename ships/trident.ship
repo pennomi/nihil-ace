@@ -4,7 +4,7 @@
                  " l b l ",
                  " sbrbs ",
                  "  rcr  ",
-                 "Kbbbbbk",
+                 "Fbbtbbf",
                  "ee b ee",
                  "   s   "],
     "rotation": ["       ",
@@ -12,7 +12,7 @@
                  " 0 0 0 ",
                  " 00000 ",
                  "  000  ",
-                 "2000002",
+                 "0000000",
                  "00 0 00",
                  "   0   "],
     "keybindings": [
@@ -30,6 +30,11 @@
             "position": [5, 2],
             "key": "A",
             "type": "mirror"
+        },
+        {
+            "position": [3, 5],
+            "key": "T",
+            "type": "toggle"
         },
         {
             "position": [1, 3],

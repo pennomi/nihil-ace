@@ -133,6 +133,14 @@ class AngleRightBlock(Block):
     image = 'images/angle_right.png'
 
 
+class FinLeftBlock(Block):
+    image = 'images/fin_left.png'
+
+
+class FinRightBlock(Block):
+    image = 'images/fin_right.png'
+
+
 class ArmorBlock(Block):
     health = 6
     image = 'images/armor.png'
@@ -155,7 +163,6 @@ class ReactorBlock(Block):
 class CockpitBlock(Block):
     image = 'images/cockpit.png'
     ai = True
-    scale = 1
 
     def __init__(self, point):
         super(CockpitBlock, self).__init__(point)
@@ -176,8 +183,11 @@ class CockpitBlock(Block):
             self.shieldsup = True
 
         # ALWAYS FLY TOWARDS PLAYER
+        if not SPACE.camera_lock(): # they win and quit moving
+            [b.on_key_up() for b in self.slave_blocks]
+            return
         target = SPACE.camera_lock # this is naive, but works for now
-        target_dir = target._body.position - self._body.position
+        target_dir = target()._body.position - self._body.position
         ang = (self._body.angle - target_dir.angle + math.pi / 2) % (math.pi * 2)
         general_direction = abs((ang) % (math.pi * 2)) < math.pi / 8
         ang += self._body.angular_velocity
@@ -320,6 +330,7 @@ class TractorBlock(ControllableBlock):
     _tractor_shape = None
     _tractor_link = None
     radius = BLOCK_SIZE * 10
+    resource_count = 0 # this will eventually be storage blocks?
 
     def activate(self):
         density = 0.01
@@ -327,6 +338,7 @@ class TractorBlock(ControllableBlock):
         inertia = pymunk.moment_for_circle(mass, 0, self.radius)
         self._tractor_body = pymunk.Body(mass, inertia)
         self._tractor_body.position = self._body.position
+        self._tractor_body._get_block = ref(self)
         self._tractor_shape = pymunk.Circle(self._tractor_body, self.radius)
         self._tractor_shape.collision_type = COLLISION_TYPES["tractor"]
         self._tractor_shape.sensor = True

@@ -9,7 +9,7 @@ SCREEN_BUFFER = 16
 
 def off_screen(point):
     p = adjust_for_cam(point)
-    scale = SPACE.camera_lock.scale
+    scale = SPACE.scale
     b = SCREEN_BUFFER * scale
 
     if (p.x < -b or p.y < -b or
@@ -20,10 +20,7 @@ def off_screen(point):
 
 
 def adjust_for_cam(point):
-    scale = SPACE.camera_lock.scale
-    if SPACE.camera_lock:
-        return (point - SPACE.camera_lock._body.position) * scale + SCREEN_CENTER
-    return point * scale
+    return (point - SPACE.last_pos) * SPACE.scale + SCREEN_CENTER
 
 
 def draw_rect(texture, points, direction=0):

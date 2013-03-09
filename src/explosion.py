@@ -53,7 +53,7 @@ class Explosion:
         if settings.SOUND:
             sound = random.choice(EXPLOSION_SFX)
             # TODO: 3D sound
-            #volume = (500 - (SPACE.camera_lock._body.position - self._body.position).length) / 500
+            #volume = (500 - (SPACE.camera_lock()._body.position - self._body.position).length) / 500
             #if volume > 0:
             #    print volume
             #    sound.volume = random.choice([1.0, .5, .25])
@@ -81,7 +81,7 @@ class Explosion:
         # TODO: more optimized to draw as one large batch
         gl.glBegin(gl.GL_QUADS)
 
-        r = (self.radius + BLOCK_SIZE) * SPACE.camera_lock.scale
+        r = (self.radius + BLOCK_SIZE) * SPACE.scale
         for i, vert in enumerate([Vec2d(p.x - r, p.y - r),
                                   Vec2d(p.x + r, p.y - r),
                                   Vec2d(p.x + r, p.y + r),

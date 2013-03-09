@@ -31,8 +31,13 @@ def space_upkeep(space):
         if hasattr(r._shape, "target") and r._shape.target():
             b = r._shape
             direction = b.target().position - b.body.position
+            if direction.length < 16 / 2: # TODO: hardcoded block size
+                block = b.target()._get_block()
+                if block:
+                    block.resource_count += 1
+                space.remove_resource(r)
             # TODO: 160 is the radius of the field...
-            #       let's do that dynamically
+            #       let's get that dynamically
             direction.length = max(0.1, (160 - direction.length) / (160))
             b.body.apply_impulse(direction)
     for e in space.explosions:
@@ -48,6 +53,8 @@ class Space(pymunk.Space):
     controllable_blocks = []
     explosions = []
     camera_lock = None
+    last_pos = pymunk.vec2d.Vec2d(0, 0)
+    scale = 1
     _projectiles = set()
     _resources = set()
 

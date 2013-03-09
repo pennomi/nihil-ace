@@ -53,7 +53,7 @@ class Projectile:
         gl.glBindTexture(gl.GL_TEXTURE_2D, BLASTER_IMAGE.id)
         gl.glEnable(gl.GL_POINT_SPRITE)
         gl.glTexEnvi(gl.GL_POINT_SPRITE, gl.GL_COORD_REPLACE, gl.GL_TRUE)
-        gl.glPointSize(4 * SPACE.camera_lock.scale)
+        gl.glPointSize(4 * SPACE.scale)
 
         gl.glBegin(gl.GL_POINTS)
         # TODO: more optimized to draw as one large batch

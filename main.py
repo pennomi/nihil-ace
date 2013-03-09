@@ -10,7 +10,8 @@ from pyglet.window import key
 from src.space import SPACE, space_upkeep
 from src.blocks import (Block, ShieldBlock, EngineBlock, ReactorBlock,
                     CockpitBlock, BlasterBlock, ArmorBlock, ScannerBlock,
-                    TractorBlock, AngleLeftBlock, AngleRightBlock, BLOCK_SIZE)
+                    TractorBlock, AngleLeftBlock, AngleRightBlock,
+                    FinLeftBlock, FinRightBlock, BLOCK_SIZE)
 from src.materials import COLLISION_TYPES
 from pymunk.vec2d import Vec2d
 import random
@@ -47,6 +48,8 @@ BLOCK_MAP = {
               't': TractorBlock,
               'k': AngleLeftBlock,
               'K': AngleRightBlock,
+              'f': FinLeftBlock,
+              'F': FinRightBlock,
             }
 
 def spawn_ship(filename, spawn_location, player_controlled=False):
@@ -75,7 +78,7 @@ def spawn_ship(filename, spawn_location, player_controlled=False):
                     controllers.append(new)
                     new.temp_slaves = data['keybindings']
                     if player_controlled:
-                        SPACE.camera_lock = new
+                        SPACE.camera_lock = ref(new)
                         new.ai = False
             whole_ship[i].append(new)
             # weld
@@ -103,11 +106,8 @@ BACKGROUND_SPRITE.opacity = 128
 
 def draw_background():
     w = BACKGROUND.width + 1 # +1 so they don't overlap
-    if SPACE.camera_lock:
-        # 8.0 is the parallax factor
-        offset = -((SPACE.camera_lock._body.position / 8.0) % w)
-    else:
-        offset = Vec2d(0, 0)
+    # 8.0 is the parallax factor
+    offset = -((SPACE.last_pos / 8.0) % w)
     for i in (0, 1):
         for j in (0, 1):
             BACKGROUND_SPRITE.x, BACKGROUND_SPRITE.y = (offset + Vec2d(i, j) * w)
@@ -157,19 +157,20 @@ window = pyglet.window.Window(width=SCREEN_WIDTH, height=SCREEN_HEIGHT,
 
 @window.event
 def on_mouse_scroll(x, y, scroll_x, scroll_y):
-    if SPACE.camera_lock:
-        SPACE.camera_lock.scale += scroll_y * .05
-        SPACE.camera_lock.scale = max(SPACE.camera_lock.scale, 0.1)
-        SPACE.camera_lock.scale = min(SPACE.camera_lock.scale, 10)
-        # TODO: smooth scrolling. This'll be easy, so do it.
+    SPACE.scale += scroll_y * .05
+    SPACE.scale = max(SPACE.scale, 0.1)
+    SPACE.scale = min(SPACE.scale, 10)
+    # TODO: smooth scrolling. This'll be easy, so do it.
 
 @window.event
 def on_key_press(symbol, modifiers):
-    SPACE.camera_lock.on_key_press(symbol)
+    if SPACE.camera_lock():
+        SPACE.camera_lock().on_key_press(symbol)
 
 @window.event
 def on_key_release(symbol, modifiers):
-    SPACE.camera_lock.on_key_release(symbol)
+    if SPACE.camera_lock():
+        SPACE.camera_lock().on_key_release(symbol)
 
 FPS_DISPLAY = pyglet.clock.ClockDisplay()
 
@@ -181,12 +182,18 @@ def on_draw():
     [p.draw() for p in SPACE._projectiles]
     [r.draw() for r in SPACE._resources]
     [e.draw() for e in SPACE.explosions]
+    #t = [b for b in SPACE.blocks if isinstance(b, TractorBlock)]
+    #if t:
+    #    print t[0].resource_count
     FPS_DISPLAY.draw()
 
 def update(dt):
     [b._upkeep() for b in SPACE.controllable_blocks]
     SPACE.add_post_step_callback(space_upkeep, SPACE)
     SPACE.step(dt)
+    # Update the camera's last valid position
+    if SPACE.camera_lock():
+        SPACE.last_pos = Vec2d(SPACE.camera_lock()._body.position)
 pyglet.clock.schedule_interval(update, 1.0 / 60.0)
 
 def tick_ai(dt):

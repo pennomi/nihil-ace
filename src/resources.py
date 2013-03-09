@@ -15,6 +15,7 @@ BLOCK_SIZE = 16
 RESOURCE_IMAGE = pyglet.image.load('images/iron.png').mipmapped_texture
 
 class Resource(object):
+    # TODO: instead of TTL, how about some form of a half-life?
     ttl = 600 # 1 minute
 
     def __init__(self, source=None):
@@ -43,7 +44,7 @@ class Resource(object):
         gl.glBindTexture(gl.GL_TEXTURE_2D, RESOURCE_IMAGE.id)
         gl.glEnable(gl.GL_POINT_SPRITE)
         gl.glTexEnvi(gl.GL_POINT_SPRITE, gl.GL_COORD_REPLACE, gl.GL_TRUE)
-        gl.glPointSize(8 * SPACE.camera_lock.scale)
+        gl.glPointSize(8 * SPACE.scale)
 
         gl.glBegin(gl.GL_POINTS)
         # TODO: more optimized to draw as one large batch
