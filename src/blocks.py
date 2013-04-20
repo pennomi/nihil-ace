@@ -18,16 +18,18 @@ import random
 BLOCK_SIZE = 16
 
 CACHED_IMAGES = {}
-def load_image(filename):
+def load_image(filename, anchor=Vec2d(0, 0)):
     if filename in CACHED_IMAGES:
         return CACHED_IMAGES[filename]
     else:
         img = pyglet.image.load(filename)
+        img.anchor_x, img.anchor_y = int(anchor.x), int(anchor.y)
         CACHED_IMAGES[filename] = img.mipmapped_texture
         return CACHED_IMAGES[filename]
 
 
 class Block(object):
+    # TODO: let's make blocks that can be more than a single fixed size
     material = Material()
     bindings = []
     direction = 0 # 0-3 for the cardinal directions
@@ -36,21 +38,20 @@ class Block(object):
     has_exploded = False
 
     # sprites
-    image = 'images/block.png'
-    broken_image = 'images/hull_damaged.png'
+    image = 'basic'
+    # TODO: calculate this based on individual block size
     image_anchor = Vec2d(BLOCK_SIZE / 2, BLOCK_SIZE / 2)
 
     def __init__(self, point):
         self._joints = WeakSet()
         self._adjacent_blocks = WeakSet()
-
-        self.img = load_image(self.image)
-        self.img.anchor_x = int(self.image_anchor.x)
-        self.img.anchor_y = int(self.image_anchor.y)
-        # TODO: (severely) damaged versions of all sprites
-        self.broken_img = load_image(self.broken_image)
-        self.broken_img.anchor_x = int(self.image_anchor.x)
-        self.broken_img.anchor_y = int(self.image_anchor.y)
+        # load images
+        base_path = "images/blocks/{}.png".format(self.image)
+        damaged_path = "images/blocks/{}_damaged.png".format(self.image)
+        destroyed_path = "images/blocks/{}_destroyed.png".format(self.image)
+        self.img = load_image(base_path, self.image_anchor)
+        self.img_damaged = load_image(damaged_path, self.image_anchor)
+        self.img_destroyed = load_image(destroyed_path, self.image_anchor)
 
         w = h = BLOCK_SIZE
         # using (density * 1 ** 2) for these because our units are BLOCK_SIZE
@@ -82,7 +83,12 @@ class Block(object):
     def draw(self):
         if off_screen(self._body.position):
             return
-        tex = self.broken_img.id if self.damage else self.img.id
+        if self.damage >= self.health:
+            tex = self.img_destroyed.id
+        elif self.damage > 0:
+            tex = self.img_damaged.id
+        else:
+            tex = self.img.id
         draw_rect(tex, self._shape.get_points(), direction=self.direction)
 
     def take_physics_damage(self):
@@ -126,30 +132,30 @@ class Block(object):
 
 
 class AngleLeftBlock(Block):
-    image = 'images/angle_left.png'
+    image = 'angle_left'
 
 
 class AngleRightBlock(Block):
-    image = 'images/angle_right.png'
+    image = 'angle_right'
 
 
 class FinLeftBlock(Block):
-    image = 'images/fin_left.png'
+    image = 'fin_left'
 
 
 class FinRightBlock(Block):
-    image = 'images/fin_right.png'
+    image = 'fin_right'
 
 
 class ArmorBlock(Block):
     health = 6
-    image = 'images/armor.png'
+    image = 'armor'
 
 
 class ReactorBlock(Block):
     power_generated = 3
     power_used = 0
-    image = 'images/reactor.png'
+    image = 'reactor'
     big_explosion = False
 
     def take_damage(self, amount):
@@ -161,7 +167,7 @@ class ReactorBlock(Block):
 
 
 class CockpitBlock(Block):
-    image = 'images/cockpit.png'
+    image = 'cockpit'
     ai = True
 
     def __init__(self, point):
@@ -274,7 +280,7 @@ class ControllableBlock(Block):
 
 
 class BlasterBlock(ControllableBlock):
-    image = 'images/blaster_block.png'
+    image = 'blaster'
 
     cooldown = 10
     cooldown_counter = 0
@@ -290,10 +296,10 @@ class BlasterBlock(ControllableBlock):
             self.shoot()
 
 
-SHIELD_IMAGE = load_image('images/shield.png')
+SHIELD_IMAGE = load_image('images/shield_bubble.png')
 class ShieldBlock(ControllableBlock):
     magnitude = 500
-    image = 'images/shield_block.png'
+    image = 'shield'
     _shield_body = None
     _shield_shape = None
     _shield_link = None
@@ -325,7 +331,7 @@ class ShieldBlock(ControllableBlock):
 
 class TractorBlock(ControllableBlock):
     magnitude = 500
-    image = 'images/shield_block.png'
+    image = 'shield'
     _tractor_body = None
     _tractor_shape = None
     _tractor_link = None
@@ -358,7 +364,7 @@ class TractorBlock(ControllableBlock):
 
 class ScannerBlock(ControllableBlock):
     magnitude = BLOCK_SIZE * 1000
-    image = 'images/scanner_block.png'
+    image = 'scanner'
 
     ARROW = load_image('images/arrow.png')
     ARROW.anchor_x = 16
@@ -387,7 +393,7 @@ ENGINE_FIRE = load_image('images/fire.png')
 
 class EngineBlock(ControllableBlock):
     magnitude = 500
-    image = 'images/engine.png'
+    image = 'engine'
 
     def _upkeep(self):
         super(EngineBlock, self)._upkeep()

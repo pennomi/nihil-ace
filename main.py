@@ -235,12 +235,12 @@ def main():
         player.play()
 
     # CREATE THE SHIP
-    spawn_ship('trident.ship', Vec2d(0, 0), player_controlled=True)
+    spawn_ship('fighter.ship', Vec2d(0, 0), player_controlled=True)
     for i in range(2):
         spawn = 3000
         spawn_ship('frigate.ship', Vec2d(random.randint(-spawn, spawn),
                                          random.randint(-spawn, spawn)))
-        spawn_ship('fighter.ship', Vec2d(random.randint(-spawn, spawn),
+        spawn_ship('trident.ship', Vec2d(random.randint(-spawn, spawn),
                                         random.randint(-spawn, spawn)))
         spawn_ship('lander.ship', Vec2d(random.randint(-spawn, spawn),
                                         random.randint(-spawn, spawn)))

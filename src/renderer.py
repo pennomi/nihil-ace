@@ -29,7 +29,7 @@ def draw_rect(texture, points, direction=0):
     gl.glBindTexture(gl.GL_TEXTURE_2D, texture)
     # Allow alpha blending
     gl.glEnable(gl.GL_BLEND)
-    gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
+    gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
     # draw
     gl.glBegin(gl.GL_QUADS)
     for i, vert in enumerate(points):
