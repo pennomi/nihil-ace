@@ -18,10 +18,8 @@ def off_screen(point):
         return True
     return False
 
-
 def adjust_for_cam(point):
     return (point - SPACE.last_pos) * SPACE.scale + SCREEN_CENTER
-
 
 def draw_rect(texture, points, direction=0):
     # Set the texture

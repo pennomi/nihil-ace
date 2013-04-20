@@ -15,17 +15,14 @@ _RESOURCES_TO_REMOVE = WeakSet()
 def space_upkeep(space):
     # update scale smoothly
     space.scale += (space.target_scale - space.scale) * .25
-    # TODO: refactor this into individual upkeep methods in the classes
     # upkeep on various entities
     for p in space._projectiles.copy():
         p.upkeep()
     for r in space._resources.copy():
         r.upkeep()
-    # tick explosions
     for e in space.explosions:
         e.upkeep()
-
-    # Safely add/remove all necessary items
+    # safely add/remove all necessary items
     space._safe_add()
     space._safe_remove()
 
