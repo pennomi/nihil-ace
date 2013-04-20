@@ -159,10 +159,8 @@ window = pyglet.window.Window(width=SCREEN_WIDTH, height=SCREEN_HEIGHT,
 
 @window.event
 def on_mouse_scroll(x, y, scroll_x, scroll_y):
-    SPACE.scale += scroll_y * .05
-    SPACE.scale = max(SPACE.scale, 0.1)
-    SPACE.scale = min(SPACE.scale, 10)
-    # TODO: smooth scrolling. This'll be easy, so do it.
+    SPACE.target_scale += scroll_y * .05
+    SPACE.target_scale = min(max(SPACE.target_scale, 0.25), 5)
 
 @window.event
 def on_key_press(symbol, modifiers):

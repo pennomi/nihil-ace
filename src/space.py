@@ -13,6 +13,8 @@ _PROJECTILES_TO_REMOVE = WeakSet()
 _RESOURCES_TO_REMOVE = WeakSet()
 
 def space_upkeep(space):
+    # update scale smoothly
+    space.scale += (space.target_scale - space.scale) * .25
     # TODO: refactor this into individual upkeep methods in the classes
     # upkeep on various entities
     for p in space._projectiles.copy():
@@ -35,6 +37,7 @@ class Space(pymunk.Space):
     camera_lock = None
     last_pos = pymunk.vec2d.Vec2d(0, 0)
     scale = 1
+    target_scale = 1
     _projectiles = set()
     _resources = set()
 
