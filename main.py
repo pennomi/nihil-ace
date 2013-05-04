@@ -11,8 +11,9 @@ from src.space import SPACE, space_upkeep
 from src.blocks import (Block, ShieldBlock, EngineBlock, ReactorBlock,
                     CockpitBlock, BlasterBlock, ArmorBlock, ScannerBlock,
                     TractorBlock, AngleLeftBlock, AngleRightBlock,
-                    FinLeftBlock, FinRightBlock, BLOCK_SIZE)
+                    FinLeftBlock, FinRightBlock, ConstructionBlock, BLOCK_SIZE)
 from src.materials import COLLISION_TYPES
+from src.renderer import inverse_adjust_for_cam
 from pymunk.vec2d import Vec2d
 import random
 from src import settings
@@ -115,6 +116,25 @@ def draw_background():
             BACKGROUND_SPRITE.x, BACKGROUND_SPRITE.y = (offset + Vec2d(i, j) * w)
             BACKGROUND_SPRITE.draw()
 
+CONSTRUCTION_BLOCK = ConstructionBlock()
+def draw_construction_interface():
+    # snap to nearest grid position
+    mouse = inverse_adjust_for_cam(MOUSE)
+    if not SPACE.camera_lock():
+        return
+    cam = SPACE.camera_lock()._body.position
+    a = SPACE.camera_lock()._body.angle
+    _ = (mouse - cam)
+    _.angle -= a
+    _ = _ % Vec2d(BLOCK_SIZE, BLOCK_SIZE)
+    _.angle += a
+    mouse -= _
+
+
+    CONSTRUCTION_BLOCK._body.position = mouse
+    CONSTRUCTION_BLOCK._body.angle = SPACE.camera_lock()._body.angle
+    CONSTRUCTION_BLOCK.draw()
+
 def nocollide(space, arbiter):
     return False
 
@@ -157,6 +177,11 @@ def tractor_collision_handler(space, arbiter):
 window = pyglet.window.Window(width=SCREEN_WIDTH, height=SCREEN_HEIGHT,
                                                                 vsync=False)
 
+MOUSE = Vec2d(0, 0)
+@window.event
+def on_mouse_motion(x, y, dx, dy):
+    MOUSE.x, MOUSE.y = x, y
+
 @window.event
 def on_mouse_scroll(x, y, scroll_x, scroll_y):
     SPACE.target_scale += scroll_y * .05
@@ -182,6 +207,7 @@ def on_draw():
     [p.draw() for p in SPACE._projectiles]
     [r.draw() for r in SPACE._resources]
     [e.draw() for e in SPACE.explosions]
+    draw_construction_interface()
     FPS_DISPLAY.draw()
 
 def update(dt):

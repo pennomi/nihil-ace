@@ -9,6 +9,7 @@ COLLISION_TYPES = {
     "explosion": 4,
     "resource": 5,
     "tractor": 6,
+    "ghost": 7,
 }
 
 class Material(object):

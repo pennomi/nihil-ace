@@ -21,7 +21,10 @@ def off_screen(point):
 def adjust_for_cam(point):
     return (point - SPACE.last_pos) * SPACE.scale + SCREEN_CENTER
 
-def draw_rect(texture, points, direction=0):
+def inverse_adjust_for_cam(point):
+    return (point - SCREEN_CENTER) / SPACE.scale + SPACE.last_pos
+
+def draw_rect(texture, points, direction=0, use_cam=True):
     # Set the texture
     gl.glEnable(gl.GL_TEXTURE_2D)
     gl.glBindTexture(gl.GL_TEXTURE_2D, texture)
@@ -32,7 +35,10 @@ def draw_rect(texture, points, direction=0):
     gl.glBegin(gl.GL_QUADS)
     for i, vert in enumerate(points):
         b = (i + direction) % 4 # render according to the direction
-        x, y = adjust_for_cam(vert)
+        if use_cam:
+            x, y = adjust_for_cam(vert)
+        else:
+            x, y = vert
         texture = b // 2, ((b + 1) // 2) % 2
         gl.glTexCoord2f(*texture)
         gl.glVertex3f(x, y, 0)

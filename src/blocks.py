@@ -3,11 +3,10 @@ import pyglet
 import pymunk
 from renderer import adjust_for_cam, off_screen, draw_rect, draw_large_point
 from space import SPACE
-from materials import Material
+from materials import Material, COLLISION_TYPES
 from pyglet.window import key
 from pymunk import PivotJoint, GearJoint
 from pymunk.vec2d import Vec2d
-from materials import COLLISION_TYPES
 from weakref import ref, WeakSet
 from explosion import Explosion
 from projectiles import Projectile
@@ -26,6 +25,33 @@ def load_image(filename, anchor=Vec2d(0, 0)):
         img.anchor_x, img.anchor_y = int(anchor.x), int(anchor.y)
         CACHED_IMAGES[filename] = img.mipmapped_texture
         return CACHED_IMAGES[filename]
+
+
+class ConstructionBlock():
+    ''' THIS REALLY ISN'T A BLOCK!
+    It's a ghost object that is used to display to the user where their mouse
+    is going to place a block on their ship. '''
+    direction = 0 # 0-3 for the cardinal directions
+    image = 'basic'
+    image_anchor = Vec2d(BLOCK_SIZE / 2, BLOCK_SIZE / 2)
+
+    def __init__(self):
+        # load images
+        base_path = "images/blocks/{}.png".format(self.image)
+        self.img = load_image(base_path, self.image_anchor)
+        w = h = BLOCK_SIZE
+        inertia = pymunk.moment_for_box(1, w, h)
+        self._body = pymunk.Body(1, inertia)
+        self._body.position = Vec2d(0, 0)
+        self._shape = pymunk.Poly.create_box(self._body, (w, h))
+        self._shape.collision_type = COLLISION_TYPES['ghost']
+        self._shape.sensor = True
+        self._shape._get_block = ref(self)
+        SPACE.add(self._body, self._shape)
+
+    def draw(self):
+        draw_rect(self.img.id, self._shape.get_points(),
+                  direction=self.direction)
 
 
 class Block(object):
