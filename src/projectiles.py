@@ -26,18 +26,17 @@ class Projectile:
     ttl = 100
 
     def __init__(self, source=None, damage=1):
+        source_body = source._body
         # physics
         r = 3
         mass = 0.01
         inertia = pymunk.moment_for_circle(mass, 0, r)
         self._body = pymunk.Body(mass, inertia)
         p = Vec2d(BLOCK_SIZE, 0)
-        p.angle = source._body.angle + math.pi / 2 + source.direction * math.pi / 2
-        self._body.position = source._body.position + p
-        self._body.velocity = source._body.velocity + p * BLOCK_SIZE * 2
+        p.angle = source_body.angle + math.pi / 2 + source.direction * math.pi / 2
+        self._body.position = source_body.position + p
+        self._body.velocity = source_body.velocity + p * BLOCK_SIZE * 2
         self._shape = pymunk.Circle(self._body, r)
-        self._shape.elasticity = 1.0
-        self._shape.friction= 0.0
         self._shape.collision_type = COLLISION_TYPES["blaster"]
         self._shape._get_projectile = ref(self)
         SPACE.safe_add(self._body, self._shape)

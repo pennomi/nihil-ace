@@ -58,7 +58,6 @@ BLOCK_MAP = {
 def spawn_ship(filename, spawn_location, player_controlled=False):
     ''' Loads a file with a json definition of a ship.
     '''
-    # TODO: Restructure and clean this up; not important - only runs on load
     with open('ships/' + filename, 'r') as f:
         lines = f.read()
 
