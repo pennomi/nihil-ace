@@ -56,8 +56,7 @@ BLOCK_MAP = {
             }
 
 def spawn_ship(filename, spawn_location, player_controlled=False):
-    ''' Loads a file with a json definition of a ship.
-    '''
+    ''' Loads a file with a json definition of a ship. '''
     with open('ships/' + filename, 'r') as f:
         lines = f.read()
 
@@ -112,13 +111,15 @@ def draw_background():
     offset = -((SPACE.last_pos / 8.0) % w)
     for i in (0, 1):
         for j in (0, 1):
-            BACKGROUND_SPRITE.x, BACKGROUND_SPRITE.y = (offset + Vec2d(i, j) * w)
+            BACKGROUND_SPRITE.x, BACKGROUND_SPRITE.y = (offset +
+                                                            Vec2d(i, j) * w)
             BACKGROUND_SPRITE.draw()
 
 CONSTRUCTION_BLOCK = ConstructionBlock()
 def draw_construction_interface():
     # snap to nearest grid position
-    mouse = inverse_adjust_for_cam(MOUSE)
+    mouse = inverse_adjust_for_cam(MOUSE +
+                        Vec2d(BLOCK_SIZE / 2, BLOCK_SIZE / 2) * SPACE.scale)
     if not SPACE.camera_lock():
         return
     cam = SPACE.camera_lock()._body.position
@@ -128,10 +129,20 @@ def draw_construction_interface():
     _ = _ % Vec2d(BLOCK_SIZE, BLOCK_SIZE)
     _.angle += a
     mouse -= _
-
-
+    # create a collision object
     CONSTRUCTION_BLOCK._body.position = mouse
     CONSTRUCTION_BLOCK._body.angle = SPACE.camera_lock()._body.angle
+    # check if stuff is near it
+    valid_welds = []
+    for block in SPACE.camera_lock().construction:
+        dist = round((block._body.position - mouse).length)
+        if dist == 0:
+            valid_welds = []
+            break
+        elif dist == BLOCK_SIZE:
+            valid_welds.append(block)
+    CONSTRUCTION_BLOCK.valid_welds = valid_welds
+    # draw it
     CONSTRUCTION_BLOCK.draw()
 
 def nocollide(space, arbiter):
@@ -185,6 +196,22 @@ def on_mouse_motion(x, y, dx, dy):
 def on_mouse_scroll(x, y, scroll_x, scroll_y):
     SPACE.target_scale += scroll_y * .05
     SPACE.target_scale = min(max(SPACE.target_scale, 0.25), 5)
+
+@window.event
+def on_mouse_press(x, y, button, modifiers):
+    try:
+        if not SPACE.camera_lock():
+            return
+        if not CONSTRUCTION_BLOCK or not CONSTRUCTION_BLOCK.valid_welds:
+            return
+        # TODO: any block type
+        new_block = Block(CONSTRUCTION_BLOCK._body.position)
+        new_block._body.angle = CONSTRUCTION_BLOCK.valid_welds[0]._body.angle
+        for block in CONSTRUCTION_BLOCK.valid_welds:
+            new_block.weld_to(block)
+        # TODO: link the cockpit as the master block
+    except Exception as e:
+        print e
 
 @window.event
 def on_key_press(symbol, modifiers):

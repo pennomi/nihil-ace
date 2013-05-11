@@ -39,6 +39,7 @@ class ConstructionBlock():
         # load images
         base_path = "images/blocks/{}.png".format(self.image)
         self.img = load_image(base_path, self.image_anchor)
+        # create collision object
         w = h = BLOCK_SIZE
         inertia = pymunk.moment_for_box(1, w, h)
         self._body = pymunk.Body(1, inertia)
@@ -48,6 +49,8 @@ class ConstructionBlock():
         self._shape.sensor = True
         self._shape._get_block = ref(self)
         SPACE.add(self._body, self._shape)
+        # what can it connect to?
+        self.valid_welds = []
 
     def draw(self):
         draw_rect(self.img.id, self._shape.get_points(),
