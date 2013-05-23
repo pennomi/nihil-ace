@@ -119,6 +119,7 @@ CONSTRUCTION_BLOCK = ConstructionBlock()
 def draw_construction_interface():
     # snap to nearest grid position
     mouse = inverse_adjust_for_cam(MOUSE +
+                        # TODO: this offset is wrong when rotated
                         Vec2d(BLOCK_SIZE / 2, BLOCK_SIZE / 2) * SPACE.scale)
     if not SPACE.camera_lock():
         return
@@ -286,14 +287,18 @@ def main():
 
     # CREATE THE SHIP
     spawn_ship('fighter.ship', Vec2d(0, 0), player_controlled=True)
-    for i in range(2):
+    for i in range(5):
         spawn = 3000
-        spawn_ship('frigate.ship', Vec2d(random.randint(-spawn, spawn),
-                                         random.randint(-spawn, spawn)))
-        spawn_ship('trident.ship', Vec2d(random.randint(-spawn, spawn),
+        #spawn_ship('frigate.ship', Vec2d(random.randint(-spawn, spawn),
+        #                                 random.randint(-spawn, spawn)))
+        #spawn_ship('trident.ship', Vec2d(random.randint(-spawn, spawn),
+        #                                random.randint(-spawn, spawn)))
+        #spawn_ship('lander.ship', Vec2d(random.randint(-spawn, spawn),
+        #                                random.randint(-spawn, spawn)))
+        spawn_ship('mini.ship', Vec2d(random.randint(-spawn, spawn),
                                         random.randint(-spawn, spawn)))
-        spawn_ship('lander.ship', Vec2d(random.randint(-spawn, spawn),
-                                        random.randint(-spawn, spawn)))
+    for i in range(5):
+        spawn = 3000
         spawn_ship('asteroid.ship', Vec2d(random.randint(-spawn, spawn),
                                           random.randint(-spawn, spawn)))
 
