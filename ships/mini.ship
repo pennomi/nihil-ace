@@ -1,0 +1,44 @@
+{
+    "blocks":   ["     ",
+                 " lll ",
+                 " rsr ",
+                 " ece ",
+                 "     "],
+    "rotation": ["     ",
+                 " 000 ",
+                 " 000 ",
+                 " 000 ",
+                 "     "],
+    "keybindings": [
+        {
+            "position": [2, 2],
+            "key": "S",
+            "type": "inverted"
+        },
+        {
+            "position": [1, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [2, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [3, 1],
+            "key": "A",
+            "type": "mirror"
+        },
+        {
+            "position": [1, 3],
+            "key": "LEFT",
+            "type": "mirror"
+        },
+        {
+            "position": [3, 3],
+            "key": "RIGHT",
+            "type": "mirror"
+        }
+    ]
+}
