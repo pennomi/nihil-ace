@@ -159,7 +159,9 @@ def nocollide(space, arbiter):
 def blaster_collision_handler(space, arbiter):
     for s in arbiter.shapes:
         if hasattr(s, '_get_block'):
-            s._get_block().take_damage(1)
+            b = s._get_block()
+            if b:
+                b.take_damage(1)
         else:
             p = s._get_projectile()
             p.ttl = 0
@@ -174,7 +176,9 @@ def explosion_collision_handler(space, arbiter):
             e = explosion._get_explosion()
     for s in arbiter.shapes:
         if hasattr(s, '_get_block'):
-            s._get_block().take_damage(e.damage)
+            b = s._get_block()
+            if b:
+                b.take_damage(e.damage)
         direction = explosion.body.position - s.body.position
         if direction.length:
             direction.length = (explosion._get_explosion().radius -
@@ -248,7 +252,7 @@ def on_draw():
     draw_background()
     [b.draw() for b in SPACE.blocks]
     [p.draw() for p in SPACE._projectiles]
-    [r.draw() for r in SPACE._resources]
+    [r.draw() for r in SPACE.resources]
     [e.draw() for e in SPACE.explosions]
     draw_construction_interface()
     FPS_DISPLAY.draw()
@@ -261,7 +265,7 @@ def update(dt):
     # upkeep on various entities
     for p in SPACE._projectiles.copy():
         p.upkeep()
-    for r in SPACE._resources.copy():
+    for r in SPACE.resources.copy():
         r.upkeep()
     for e in SPACE.explosions:
         e.upkeep()

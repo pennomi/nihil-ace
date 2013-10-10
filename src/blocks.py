@@ -47,7 +47,7 @@ class ConstructionBlock():
         inertia = pymunk.moment_for_box(1, w, h)
         self._body = pymunk.Body(1, inertia)
         self._body.position = Vec2d(0, 0)
-        self._shape = pymunk.Poly.create_box(self._body, (w, h))
+        self._shape = pymunk.Poly.create_box(self._body, (w, h), radius=0.2)
         self._shape.collision_type = COLLISION_TYPES['ghost']
         self._shape.sensor = True
         self._shape._get_block = ref(self)
@@ -135,7 +135,10 @@ class Block(object):
             Explosion(self._body.position, BLOCK_SIZE,
                       velocity=self._body.velocity)
             # remove joints
-            print([j for j in self._joints])
+            for block in self._adjacent_blocks:
+                toremove = self._joints & block._joints
+                for joint in toremove:
+                    block._joints.remove(joint)
             SPACE.remove(*self._joints)
             self._joints = WeakSet()
             # remove ties to the construction
@@ -149,9 +152,9 @@ class Block(object):
                 Resource(self)
             SPACE.remove(self._body, self._shape)
             SPACE.blocks.remove(self)
-            if issubclass(self, ControllableBlock):
+            if self in SPACE.controllable_blocks:
                 SPACE.controllable_blocks.remove(self)
-            if isinstance(self, CockpitBlock):
+            if self in SPACE.controller_blocks:
                 SPACE.controller_blocks.remove(self)
 
     @property

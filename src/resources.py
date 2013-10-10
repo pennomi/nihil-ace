@@ -14,6 +14,7 @@ BLOCK_SIZE = 16
 
 RESOURCE_IMAGE = pyglet.image.load('images/iron.png').mipmapped_texture
 
+
 class Resource(object):
     # represents the halflife of the resource object
     decay_chance = 0.00125
@@ -40,19 +41,20 @@ class Resource(object):
     def upkeep(self):
         if self.decay_chance > random.random():
             SPACE.remove(self._shape, self._body)
-            SPACE.remove_resource(self)
+            SPACE.resources.remove(self)
         if hasattr(self._shape, "target") and self._shape.target():
             b = self._shape
             direction = b.target().position - b.body.position
-            if direction.length < 16 / 2: # TODO: hardcoded block size
+            if direction.length < BLOCK_SIZE / 2:
                 block = b.target()._get_block()
                 if block:
                     block.resource_count += 1
-                SPACE._resources.remove(self)
+                SPACE.resources.remove(self)
             # TODO: 160 is the radius of the field...
             #       let's get that dynamically
-            direction.length = max(0.1, (160 - direction.length) / (160))
+            direction.length = max(0.1, (160 - direction.length) / 160)
             b.body.apply_impulse(direction)
+            # TODO: http://chipmunk-physics.net/forum/viewtopic.php?f=1&t=2912
 
     def draw(self):
         p = adjust_for_cam(self._body.position)
