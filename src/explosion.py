@@ -46,7 +46,7 @@ class Explosion:
         self._shape = pymunk.Circle(self._body, radius)
         self._shape.collision_type = COLLISION_TYPES['explosion']
         self._shape._get_explosion = ref(self)
-        SPACE.safe_add(self._body, self._shape)
+        SPACE.add(self._body, self._shape)
         SPACE.register_explosion(self)
 
         # play SFX
@@ -62,11 +62,11 @@ class Explosion:
     def upkeep(self):
         self.ticks -= 1
         if self.ticks <= 0:
+            SPACE.remove(self._body, self._shape)
             SPACE.explosions.remove(self)
-            SPACE.safe_remove(self._body, self._shape)
 
     def draw(self):
-        # TODO: Let's use particles. Way more fun.
+        # TODO: Let's use particles. And lighting! Way more fun.
 
         p = adjust_for_cam(self._body.position)
 

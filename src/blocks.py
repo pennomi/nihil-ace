@@ -17,6 +17,8 @@ import random
 BLOCK_SIZE = 16
 
 CACHED_IMAGES = {}
+
+
 def load_image(filename, anchor=Vec2d(0, 0)):
     if filename in CACHED_IMAGES:
         return CACHED_IMAGES[filename]
@@ -28,10 +30,11 @@ def load_image(filename, anchor=Vec2d(0, 0)):
 
 
 class ConstructionBlock():
-    ''' THIS REALLY ISN'T A BLOCK!
+    """THIS REALLY ISN'T A BLOCK!
     It's a ghost object that is used to display to the user where their mouse
-    is going to place a block on their ship. '''
-    direction = 0 # 0-3 for the cardinal directions
+    is going to place a block on their ship.
+    """
+    direction = 0  # 0-3 for the cardinal directions
     image = 'basic'
     image_anchor = Vec2d(BLOCK_SIZE / 2, BLOCK_SIZE / 2)
 
@@ -53,7 +56,7 @@ class ConstructionBlock():
         self.valid_welds = []
 
     def draw(self):
-        draw_rect(self.img.id, self._shape.get_points(),
+        draw_rect(self.img.id, self._shape.get_vertices(),
                   direction=self.direction)
 
 
@@ -61,7 +64,7 @@ class Block(object):
     # TODO: let's make blocks that can be more than a single fixed size
     material = Material()
     bindings = []
-    direction = 0 # 0-3 for the cardinal directions
+    direction = 0  # 0-3 for the cardinal directions
     health = 3
     damage = 0
     has_exploded = False
@@ -118,7 +121,7 @@ class Block(object):
             tex = self.img_damaged.id
         else:
             tex = self.img.id
-        draw_rect(tex, self._shape.get_points(), direction=self.direction)
+        draw_rect(tex, self._shape.get_vertices(), direction=self.direction)
 
     def take_physics_damage(self):
         for joint in self._joints.copy():
@@ -132,7 +135,8 @@ class Block(object):
             Explosion(self._body.position, BLOCK_SIZE,
                       velocity=self._body.velocity)
             # remove joints
-            SPACE.safe_remove(*self._joints)
+            print([j for j in self._joints])
+            SPACE.remove(*self._joints)
             self._joints = WeakSet()
             # remove ties to the construction
             for block in self._adjacent_blocks:
@@ -143,8 +147,12 @@ class Block(object):
                       velocity=self._body.velocity)
             for i in range(random.randint(1,5)):
                 Resource(self)
-            SPACE.safe_remove(self._body, self._shape)
-            SPACE.delete_block(self)
+            SPACE.remove(self._body, self._shape)
+            SPACE.blocks.remove(self)
+            if issubclass(self, ControllableBlock):
+                SPACE.controllable_blocks.remove(self)
+            if isinstance(self, CockpitBlock):
+                SPACE.controller_blocks.remove(self)
 
     @property
     def construction(self):
@@ -420,6 +428,7 @@ class ScannerBlock(ControllableBlock):
 
 ENGINE_FIRE = load_image('images/fire.png')
 
+
 class EngineBlock(ControllableBlock):
     magnitude = 500
     image = 'engine'
@@ -440,5 +449,5 @@ class EngineBlock(ControllableBlock):
         if self._active and not off_screen(self._body.position):
             offset = Vec2d(0, -BLOCK_SIZE)
             offset.rotate(self._body.angle + float(self.direction) / 2 * math.pi)
-            points = [p + offset for p in self._shape.get_points()]
+            points = [p + offset for p in self._shape.get_vertices()]
             draw_rect(ENGINE_FIRE.id, points, direction=self.direction)

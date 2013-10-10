@@ -34,12 +34,12 @@ class Resource(object):
         self._shape.collision_type = COLLISION_TYPES["resource"]
         self._shape._get_resource = ref(self)
         self._shape.sensor = True
-        SPACE.safe_add(self._body, self._shape)
+        SPACE.add(self._body, self._shape)
         SPACE.register_resource(self)
 
     def upkeep(self):
         if self.decay_chance > random.random():
-            SPACE.safe_remove(self._shape, self._body)
+            SPACE.remove(self._shape, self._body)
             SPACE.remove_resource(self)
         if hasattr(self._shape, "target") and self._shape.target():
             b = self._shape
@@ -48,7 +48,7 @@ class Resource(object):
                 block = b.target()._get_block()
                 if block:
                     block.resource_count += 1
-                SPACE.remove_resource(self)
+                SPACE._resources.remove(self)
             # TODO: 160 is the radius of the field...
             #       let's get that dynamically
             direction.length = max(0.1, (160 - direction.length) / (160))
@@ -66,4 +66,4 @@ class Resource(object):
         gl.glBegin(gl.GL_POINTS)
         # TODO: more optimized to draw as one large batch
         gl.glVertex3f(p.x, p.y, 0)
-        gl.glEnd();
+        gl.glEnd()

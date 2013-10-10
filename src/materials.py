@@ -1,6 +1,5 @@
-'''
-Materials hold the physical properties and collision types of all objects.
-'''
+"""Materials hold the physical properties and collision types of all objects.
+"""
 
 COLLISION_TYPES = {
     "ship": 1,
@@ -12,6 +11,7 @@ COLLISION_TYPES = {
     "ghost": 7,
 }
 
+
 class Material(object):
     name = "Base Material"
     density = 1
@@ -19,6 +19,7 @@ class Material(object):
     friction = 0.0
     elasticity = 0.0
     collision_type = COLLISION_TYPES['ship']
+
 
 class NanotubeWeave(Material):
     name = "Nanotube Weave"

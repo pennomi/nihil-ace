@@ -22,6 +22,7 @@ if settings.SOUND:
 
 BLASTER_IMAGE = pyglet.image.load('images/blast.png').mipmapped_texture
 
+
 class Projectile:
     ttl = 100
 
@@ -39,7 +40,7 @@ class Projectile:
         self._shape = pymunk.Circle(self._body, r)
         self._shape.collision_type = COLLISION_TYPES["blaster"]
         self._shape._get_projectile = ref(self)
-        SPACE.safe_add(self._body, self._shape)
+        SPACE.add(self._body, self._shape)
         SPACE.register_projectile(self)
         # SFX
         if settings.SOUND:
@@ -48,8 +49,8 @@ class Projectile:
     def upkeep(self):
         self.ttl -= 1
         if self.ttl < 1:
-            SPACE.safe_remove(self._shape, self._body)
-            SPACE.remove_projectile(self)
+            SPACE.remove(self._shape, self._body)
+            SPACE._projectiles.remove(self)
 
     def draw(self):
         p = adjust_for_cam(self._body.position)
