@@ -182,7 +182,7 @@ def explosion_collision_handler(space, arbiter):
         direction = explosion.body.position - s.body.position
         if direction.length:
             direction.length = (explosion._get_explosion().radius -
-                                                        direction.length) * 4
+                                direction.length) * 4
             s.body.apply_impulse(direction)
     return False
 
@@ -251,7 +251,7 @@ def on_draw():
     window.clear()
     draw_background()
     [b.draw() for b in SPACE.blocks]
-    [p.draw() for p in SPACE._projectiles]
+    [p.draw() for p in SPACE.projectiles]
     [r.draw() for r in SPACE.resources]
     [e.draw() for e in SPACE.explosions]
     draw_construction_interface()
@@ -263,7 +263,7 @@ def update(dt):
     # update scale smoothly
     SPACE.scale += (SPACE.target_scale - SPACE.scale) * .25
     # upkeep on various entities
-    for p in SPACE._projectiles.copy():
+    for p in SPACE.projectiles.copy():
         p.upkeep()
     for r in SPACE.resources.copy():
         r.upkeep()

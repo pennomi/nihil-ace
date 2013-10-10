@@ -36,7 +36,7 @@ class Resource(object):
         self._shape._get_resource = ref(self)
         self._shape.sensor = True
         SPACE.add(self._body, self._shape)
-        SPACE.register_resource(self)
+        SPACE.resources.add(self)
 
     def upkeep(self):
         if self.decay_chance > random.random():

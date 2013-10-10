@@ -9,7 +9,7 @@ class Space(pymunk.Space):
     controller_blocks = []
     controllable_blocks = []
     explosions = []
-    _projectiles = set()
+    projectiles = set()
     resources = set()
     camera_lock = None
     last_pos = pymunk.vec2d.Vec2d(0, 0)
@@ -20,12 +20,6 @@ class Space(pymunk.Space):
         super(Space, self).__init__()
         self.damping = 0.8
         self.iterations = 100
-
-    def register_projectile(self, projectile):
-        self._projectiles.add(projectile)
-
-    def register_resource(self, res):
-        self.resources.add(res)
 
     def register_block(self, block):
         self.blocks.append(block)

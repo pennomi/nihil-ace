@@ -41,7 +41,7 @@ class Projectile:
         self._shape.collision_type = COLLISION_TYPES["blaster"]
         self._shape._get_projectile = ref(self)
         SPACE.add(self._body, self._shape)
-        SPACE.register_projectile(self)
+        SPACE.projectiles.add(self)
         # SFX
         if settings.SOUND:
             random.choice(BLASTER_SFX).play()
@@ -50,7 +50,7 @@ class Projectile:
         self.ttl -= 1
         if self.ttl < 1:
             SPACE.remove(self._shape, self._body)
-            SPACE._projectiles.remove(self)
+            SPACE.projectiles.remove(self)
 
     def draw(self):
         p = adjust_for_cam(self._body.position)
