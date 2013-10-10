@@ -1,5 +1,5 @@
 On Linux, do the following:
 
-# Install system depencences by running
+# Install system dependencies by running
 cat requirements.system | xargs sudo apt-get install
 pip install -r requirements.txt

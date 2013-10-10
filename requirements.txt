@@ -1,2 +1,2 @@
-hg+https://code.google.com/p/pyglet/#egg=pyglet
+pyglet
 pymunk
